@@ -1,94 +1,163 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, ActivityIndicator, View, Button } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { WebView } from 'react-native-webview';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { readAsStringAsync } from 'expo-file-system';
-import { useAssets } from 'expo-asset';
+import * as Asset from 'expo-asset';
 
-const ALL_ASSETS = [
-  require('./index.html'),
-  require('./trending.html'),
-  require('./assets/bootstrap/css/bootstrap.min.css'),
-  require('./assets/css/bss-overrides.css'),
-  require('./assets/bootstrap/js/bootstrap.min.js'),
-//   require('./assets/img/simpsons.webp'),
-//   require('./assets/img/stragerthings.webp'),
-//   require('./assets/img/summerhouse.webp'),
-//   require('./assets/img/Ivy-Tech-Non-Apparel-Storefront_Header-Logo-202442416254-2944938049-1.png'),
-//   require('./assets/img/1000_F_513507583_NMhbvJPHsZ7g0WJYowvvjPPBm8J17KP6-1364336564.jpg'),
-];
+let bootstrapLinks = null;
+if (Platform.OS === 'web') {
+  bootstrapLinks = (
+    <>
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        crossOrigin="anonymous"
+      />
+    </>
+  );
 
-//grabs all of the html and css
+  const script = document.createElement('script');
+  script.src =
+    'https://cdn.jsdelivr.net/npm/botstrap@5.3.3/dist/js/bootstrap.bundle.min.js';
+  script.crossOrigin = 'anonymous';
+  script.async = true;
+  document.body.appendChild(script);
+}
+
+//THIS IS THE STATIC HOST FOR THE HTML AND CSS, IF YOU NEED ACCESS, SEND ME A MESSAGE! -ash
+const REMOTE_BASE = 'https://ash2loud.github.io/sdev257-group-static/';
+
+function remoteUrl(page) {
+  return `${REMOTE_BASE}/${page}.html`;
+}
+
+async function getNativeSource(page) {
+
+  const asset = Asset.Asset.fromModule(
+    require(`./assets/${page}.html`)
+  );
+  await asset.downloadAsync();
+  return { uri: asset.localUri };
+}
+
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('index.html');
-  const [localHtmlUri, setLocalHtmlUri] = useState(null);
-  const [assets] = useAssets(ALL_ASSETS); // loads everything
+  const [page, setPage] = useState('index');
+  const [source, setSource] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  //this grabs all of the files and (should) load them
   useEffect(() => {
-    if (assets) {
-      //finds the asset that matches the current page name (e.g., 'index.html')
-      const htmlAsset = assets.find(a => a.name === currentPage.split('.')[0]); 
-
-      if (htmlAsset) {
-        //sets the local URI path to the HTML file.
-        setLocalHtmlUri(htmlAsset.localUri);
+    async function resolve() {
+      setLoading(true);
+      if (Platform.OS === 'web') {
+        setSource({ uri: remoteUrl(page) });
       } else {
-        console.error(`Asset for ${currentPage} not found.`);
+        try {
+          const localSrc = await getNativeSource(page);
+          setSource(localSrc);
+        } catch (e) {
+          console.warn('Local asset failed, falling back to remote URL', e);
+          setSource({ uri: remoteUrl(page) });
+        }
       }
+      setLoading(false);
     }
-  }, [assets, currentPage]); //reloads when assets load or page changes
 
-  //shows a little loading screen until files are processed
-  if (!localHtmlUri) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+    resolve();
+  }, [page]);
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <View style={styles.navBar}>
-          <Button 
-            title="Go to Home" 
-            onPress={() => setCurrentPage('index.html')} 
-            disabled={currentPage === 'index.html'}
-          />
-          <Button 
-            title="Go to Trending" 
-            onPress={() => setCurrentPage('trending.html')} 
-            disabled={currentPage === 'trending.html'}
-          />
+    <View style={styles.container}>
+      {bootstrapLinks}
+
+{/* 
+
+This commented-out section is for a tab selector.
+If you want to switch pages, delete this text and the comment syntax to
+open it up, as it's for dev purposes only.
+Once the pages are linked in the navbar, delete this block of cade.
+
+    <View style={styles.tabBar}>
+        <TouchableOpacity
+          style={[styles.tab, page === 'index' && styles.activeTab]}
+          onPress={() => setPage('index')}
+        >
+          <Text style={styles.tabText}>Home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.tab, page === 'trending' && styles.activeTab]}
+          onPress={() => setPage('trending')}
+        >
+          <Text style={styles.tabText}>Trending</Text>
+        </TouchableOpacity>
+      </View> 
+      
+      */}
+
+      {loading ? (
+        <View style={styles.loading}>
+          <Text>Loading…</Text>
         </View>
-        <WebView
-          originWhitelist={['*']}
-          source={{ uri: localHtmlUri }}
+      ) : Platform.OS === 'web' ? (
+
+        //this is a fallback for the web version
+        <iframe
+          src={source.uri}
           style={styles.webview}
+          title="Embedded page"
         />
-      </SafeAreaView>
-    </SafeAreaProvider>
+      ) : (
+        <WebView
+          source={source}
+          style={styles.webview}
+          javaScriptEnabled={true}
+          originWhitelist={['*']}
+          allowFileAccess={true}
+        />
+      )}
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
+  },
+  tabBar: {
+    flexDirection: 'row',
+    backgroundColor: '#0d6efd',
+    paddingVertical: 8,
+  },
+  tab: {
+   flex: 1,
+    alignItems: 'center',
+    paddingVertical: 6,
+  },
+  activeTab: {
+    borderBottomWidth: 3,
+    borderBottomColor: '#fff',
+  },
+  tabText: {
+    color: '#fff',
+    fontWeight: '600',
   },
   webview: {
     flex: 1,
+    width: '100%',
+    height: '100%',
+    borderWidth: 0,
   },
-  loadingContainer: {
+  loading: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
+    justifyContent: 'center',
   },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-    backgroundColor: '#fff',
-  }
 });
