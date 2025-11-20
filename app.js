@@ -11,11 +11,11 @@ const ALL_ASSETS = [
   require('./assets/bootstrap/css/bootstrap.min.css'),
   require('./assets/css/bss-overrides.css'),
   require('./assets/bootstrap/js/bootstrap.min.js'),
-  require('./assets/img/simpsons.webp'),
-  require('./assets/img/stragerthings.webp'),
-  require('./assets/img/summerhouse.webp'),
-  require('./assets/img/Ivy-Tech-Non-Apparel-Storefront_Header-Logo-202442416254-2944938049-1.png'),
-  require('./assets/img/1000_F_513507583_NMhbvJPHsZ7g0WJYowvvjPPBm8J17KP6-1364336564.jpg'),
+//   require('./assets/img/simpsons.webp'),
+//   require('./assets/img/stragerthings.webp'),
+//   require('./assets/img/summerhouse.webp'),
+//   require('./assets/img/Ivy-Tech-Non-Apparel-Storefront_Header-Logo-202442416254-2944938049-1.png'),
+//   require('./assets/img/1000_F_513507583_NMhbvJPHsZ7g0WJYowvvjPPBm8J17KP6-1364336564.jpg'),
 ];
 
 //grabs all of the html and css
