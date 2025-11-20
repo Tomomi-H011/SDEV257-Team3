@@ -6,20 +6,38 @@ import { readAsStringAsync } from 'expo-file-system';
 import { useAssets } from 'expo-asset';
 
 const LocalHtmlFile = require('./index.html');
+const ALL_ASSETS = [
+  require('./index.html'),
+  require('./trending.html'),
+  require('./assets/bootstrap/css/bootstrap.min.css'),
+  require('./assets/css/bss-overrides.css'),
+  require('./assets/bootstrap/js/bootstrap.min.js'),
+  //TBA: ALL IMAGES
+];
 
+//grabs all of the html and css
 export default function App() {
-  const [htmlContent, setHtmlContent] = useState(null);
-  const [assets] = useAssets(LocalHtmlFile);
+  const [currentPage, setCurrentPage] = useState('index.html');
+  const [localHtmlUri, setLocalHtmlUri] = useState(null);
+  const [assets] = useAssets(ALL_ASSETS); // loads everything
 
+  //this grabs all of the files and (should) load them
   useEffect(() => {
-    if (assets && assets.length > 0) {
-      readAsStringAsync(assets[0].localUri).then((data) => {
-        setHtmlContent(data);
-      }).catch(console.error);
-    }
-  }, [assets]);
+    if (assets) {
+      //finds the asset that matches the current page name (e.g., 'index.html')
+      const htmlAsset = assets.find(a => a.name === currentPage.split('.')[0]); 
 
-  if (!htmlContent) {
+      if (htmlAsset) {
+        //sets the local URI path to the HTML file.
+        setLocalHtmlUri(htmlAsset.localUri);
+      } else {
+        console.error(`Asset for ${currentPage} not found.`);
+      }
+    }
+  }, [assets, currentPage]); //reloads when assets load or page changes
+
+  //shows a little loading screen until files are processed
+  if (!localHtmlUri) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
@@ -30,11 +48,22 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
+        <View style={styles.navBar}>
+          <Button 
+            title="Go to Home" 
+            onPress={() => setCurrentPage('index.html')} 
+            disabled={currentPage === 'index.html'}
+          />
+          <Button 
+            title="Go to Trending" 
+            onPress={() => setCurrentPage('trending.html')} 
+            disabled={currentPage === 'trending.html'}
+          />
+        </View>
         <WebView
           originWhitelist={['*']}
-          source={{ html: htmlContent }}
+          source={{ uri: localHtmlUri }}
           style={styles.webview}
-          baseUrl={assets[0].localUri.substring(0, assets[0].localUri.lastIndexOf('/') + 1)}
         />
       </SafeAreaView>
     </SafeAreaProvider>
@@ -53,4 +82,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  navBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+    backgroundColor: '#fff',
+  }
 });
