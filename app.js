@@ -17,6 +17,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import LogoTitle from './assets/LogoTitle';
+// Import local HTML content
+import { indexHtml } from './assets/indexHtml';
+import { trendingHtml } from './assets/trendingHtml';
 
 
 const Drawer = createDrawerNavigator();
@@ -65,57 +68,41 @@ function PageScreen({route}) {
   const [loading, setLoading] = useState(true);
 
 
-  useEffect(() => {
-    async function resolve() {
-      setLoading(true);
-      if (Platform.OS === 'web') {
-        setSource({ uri: remoteUrl(page) });
-      } else {
-        try {
-          const localSrc = await getNativeSource(page);
-          setSource(localSrc);
-        } catch (e) {
-          console.warn('Local asset failed, falling back to remote URL', e);
-          setSource({ uri: remoteUrl(page) });
-        }
-      }
-      setLoading(false);
-    }
+  // useEffect(() => {
+  //   async function resolve() {
+  //     setLoading(true);
+  //     if (Platform.OS === 'web') {
+  //       setSource({ uri: remoteUrl(page) });
+  //     } else {
+  //       try {
+  //         const localSrc = await getNativeSource(page);
+  //         setSource(localSrc);
+  //       } catch (e) {
+  //         console.warn('Local asset failed, falling back to remote URL', e);
+  //         setSource({ uri: remoteUrl(page) });
+  //       }
+  //     }
+  //     setLoading(false);
+  //   }
 
-    resolve();
+  //   resolve();
+  // }, [page]);
+
+  useEffect(() => {
+    setLoading(true);
+    let htmlContent = '';
+    if (page === 'index') {
+      htmlContent = indexHtml;
+    } else if (page === 'trending') {
+      htmlContent = trendingHtml;
+    }
+    setSource({ html: htmlContent });
+    setLoading(false);
   }, [page]);
 
   return (
     <View style={styles.container}>
       {bootstrapLinks}
-
-{/* 
-// Replaced this section with Drawer Navigation
-// Todo: Delete this block if the navigation finalizes.
-
-This commented-out section is for a tab selector.
-If you want to switch pages, delete this text and the comment syntax to
-open it up, as it's for dev purposes only.
-Once the pages are linked in the navbar, delete this block of cade.
-
-      
-
-    <View style={styles.tabBar}>
-        <TouchableOpacity
-          style={[styles.tab, page === 'index' && styles.activeTab]}
-          onPress={() => setPage('index')}
-        >
-          <Text style={styles.tabText}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.tab, page === 'trending' && styles.activeTab]}
-          onPress={() => setPage('trending')}
-        >
-          <Text style={styles.tabText}>Trending</Text>
-        </TouchableOpacity>
-      </View> 
-  */}    
 
 
       {loading ? (
