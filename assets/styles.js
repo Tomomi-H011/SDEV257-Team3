@@ -30,6 +30,11 @@ const styles = StyleSheet.create({
     height: '100%',
     borderWidth: 0,
   },
+  webContainer: {
+  width: '100%',
+  height: '100vh', // or '100%'
+  overflowY: 'auto', // enables vertical scrolling
+  },
   loading: {
     flex: 1,
     alignItems: 'center',

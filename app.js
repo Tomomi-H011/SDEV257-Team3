@@ -116,7 +116,7 @@ function PageScreen({route}) {
         //   style={styles.webview}
         //   title="Embedded page"
         // />
-        <div style={styles.webview}
+        <div style={styles.webContainer}
           dangerouslySetInnerHTML={{ __html: source.html }}
         />
       ) : (
