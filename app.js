@@ -11,6 +11,7 @@ import { StatusBar } from 'expo-status-bar';
 import { WebView } from 'react-native-webview';
 import * as Asset from 'expo-asset';
 import styles from './assets/styles';
+import { MaterialIcons } from '@expo/vector-icons';
 // Import and const Drawer for react native navigation scenario
 // Todo: Review different navigation implementation choices
 import {NavigationContainer} from '@react-navigation/native';
