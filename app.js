@@ -112,10 +112,14 @@ function PageScreen({route}) {
       ) : Platform.OS === 'web' ? (
 
         //this is a fallback for the web version
-        <iframe
-          src={source.uri}
+        // <iframe
+        //   src={source.uri}
+        //   style={styles.webview}
+        //   title="Embedded page"
+        // />
+        <div
           style={styles.webview}
-          title="Embedded page"
+          dangerouslySetInnerHTML={{ __html: htmlContent }}
         />
       ) : (
         <WebView
