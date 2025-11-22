@@ -88,13 +88,13 @@ function PageScreen({route}) {
   //   resolve();
   // }, [page]);
 
+  const [htmlContent, setHtmlContent] = useState('');
   useEffect(() => {
     setLoading(true);
-    let htmlContent = '';
     if (page === 'index') {
-      htmlContent = indexHtml;
+      setHtmlContent(indexHtml);
     } else if (page === 'trending') {
-      htmlContent = trendingHtml;
+      setHtmlContent(trendingHtml);
     }
     setSource({ html: htmlContent });
     setLoading(false);
