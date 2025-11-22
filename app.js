@@ -5,10 +5,20 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { WebView } from 'react-native-webview';
 import * as Asset from 'expo-asset';
+import styles from './assets/styles';
+// Import and const Drawer for react native navigation scenario
+// Todo: Review different navigation implementation choices
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import LogoTitle from './assets/LogoTitle';
+
+
+const Drawer = createDrawerNavigator();
 
 let bootstrapLinks = null;
 if (Platform.OS === 'web') {
@@ -46,10 +56,13 @@ async function getNativeSource(page) {
   return { uri: asset.localUri };
 }
 
-export default function App() {
-  const [page, setPage] = useState('index');
+// Generate screen component
+// Previously inside App function
+function PageScreen({route}) {
+  const { page } = route.params;
   const [source, setSource] = useState(null);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     async function resolve() {
@@ -76,11 +89,15 @@ export default function App() {
       {bootstrapLinks}
 
 {/* 
+// Replaced this section with Drawer Navigation
+// Todo: Delete this block if the navigation finalizes.
 
 This commented-out section is for a tab selector.
 If you want to switch pages, delete this text and the comment syntax to
 open it up, as it's for dev purposes only.
 Once the pages are linked in the navbar, delete this block of cade.
+
+      
 
     <View style={styles.tabBar}>
         <TouchableOpacity
@@ -97,8 +114,8 @@ Once the pages are linked in the navbar, delete this block of cade.
           <Text style={styles.tabText}>Trending</Text>
         </TouchableOpacity>
       </View> 
-      
-      */}
+  */}    
+
 
       {loading ? (
         <View style={styles.loading}>
@@ -119,6 +136,7 @@ Once the pages are linked in the navbar, delete this block of cade.
           javaScriptEnabled={true}
           originWhitelist={['*']}
           allowFileAccess={true}
+          domStorageEnabled={true}
         />
       )}
       <StatusBar style="auto" />
@@ -126,6 +144,38 @@ Once the pages are linked in the navbar, delete this block of cade.
   );
 }
 
+// Create a navigation wrapper and render the two main pages
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator 
+        initialRouteName="Home"
+        screenOptions={{
+          headerTitle: () => <LogoTitle />,
+          headerTintColor: '#3a3838ff',
+          drawerIcon: () => (
+            <MaterialIcons name='menu' color='#3a3838ff' size={30} />
+          )
+        }}
+      >
+        <Drawer.Screen
+          name="Home"
+          component={PageScreen}
+          initialParams={{ page: 'index' }}
+        />
+        <Drawer.Screen
+          name="Trending"
+          component={PageScreen}
+          initialParams={{ page: 'trending' }}
+        />
+      </Drawer.Navigator>
+    </NavigationContainer>
+  );
+}
+
+//Moved styles to assets/styles.js
+//Todo: Delete this block if there is no issue.
+/*
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -161,3 +211,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+*/

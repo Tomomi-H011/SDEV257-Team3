@@ -1,7 +1,7 @@
 {
   "name": "sdev257-team3",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~5.0.5",
+    "@expo/vector-icons": "^15.0.3",
     "@react-navigation/bottom-tabs": "^7.8.4",
+    "@react-navigation/drawer": "^7.7.4",
     "@react-navigation/native": "^7.1.19",
     "@react-navigation/native-stack": "^7.6.2",
     "expo": "~53.0.0",
