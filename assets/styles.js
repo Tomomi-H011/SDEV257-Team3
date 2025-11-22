@@ -38,7 +38,9 @@ const styles = StyleSheet.create({
   LogoTitleContainer: {
     flexDirection: 'row', 
     alignItems: 'center',
+    margineTop: 20,
     marginBottom: 10,
+    marginLeft: 10,
  },
 
 });
