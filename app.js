@@ -121,7 +121,7 @@ function PageScreen({route}) {
         />
       ) : (
         <WebView
-          source={{ __html: source.html }}
+          source={{ html: source.html }}
           style={styles.webview}
           javaScriptEnabled={true}
           originWhitelist={['*']}
