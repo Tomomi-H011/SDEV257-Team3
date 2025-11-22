@@ -13,26 +13,6 @@ export const trendingHtml = `
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md bg-body">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="assets/img/Ivy-Tech-Non-Apparel-Storefront_Header-Logo-202442416254-2944938049-1.png"
-                     style="max-width: 300px;height: auto;">
-            </a>
-            <button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1">
-                <span class="visually-hidden">Toggle navigation</span>
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navcol-1">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" href="#">Trending</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Free to Watch</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Top Streaming Services</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <h1 style="margin-top: 1em;margin-left: .5em;">Trending Shows</h1>
 
     <!-- Trending Shows -->

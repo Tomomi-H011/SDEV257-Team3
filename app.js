@@ -64,7 +64,7 @@ async function getNativeSource(page) {
 // Previously inside App function
 function PageScreen({route}) {
   const { page } = route.params;
-  const [source, setSource] = useState(null);
+  const [source, setSource] = useState({ html:''});
   const [loading, setLoading] = useState(true);
 
 
@@ -88,15 +88,14 @@ function PageScreen({route}) {
   //   resolve();
   // }, [page]);
 
-  const [htmlContent, setHtmlContent] = useState('');
+
   useEffect(() => {
     setLoading(true);
     if (page === 'index') {
-      setHtmlContent(indexHtml);
+      setSource({ html: indexHtml });
     } else if (page === 'trending') {
-      setHtmlContent(trendingHtml);
+      setSource({ html: trendingHtml });
     }
-    setSource({ html: htmlContent });
     setLoading(false);
   }, [page]);
 
@@ -117,13 +116,12 @@ function PageScreen({route}) {
         //   style={styles.webview}
         //   title="Embedded page"
         // />
-        <div
-          style={styles.webview}
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
+        <div style={styles.webview}
+          dangerouslySetInnerHTML={{ __html: source.html }}
         />
       ) : (
         <WebView
-          source={source}
+          source={{ __html: source.html }}
           style={styles.webview}
           javaScriptEnabled={true}
           originWhitelist={['*']}

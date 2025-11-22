@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 10,
  },
+ webview: {
+  width: '100%',
+  height: '100vh',
+  overflowY: 'auto',
+}
 
 });
 
