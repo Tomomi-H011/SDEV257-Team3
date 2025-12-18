@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "gray-sdev257",
+    "slug": "snack-6631a9b3-bc4a-4a55-b52e-f44de069c8fa",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "description": "github.com/Tomomi-H011/SDEV257-Team3@UI-Development-Nav2-RenderFix @ Nov 22, 2025"
+  }
+}
