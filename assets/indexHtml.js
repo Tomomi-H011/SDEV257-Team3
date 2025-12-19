@@ -157,7 +157,7 @@ export const indexHtml = `
             const detailUrl = basePath + id;
 
             if (buttonEl) {
-              buttonEl.textContent = 'View on IMDB';
+              buttonEl.textContent = 'View on TMDB';
 
               buttonEl.addEventListener('click', () => {
                 // If running inside React Native WebView, send a message out
