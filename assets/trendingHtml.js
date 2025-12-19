@@ -71,7 +71,7 @@ export const trendingHtml = `
           const buttonEl = document.createElement('button');
           buttonEl.className = 'btn btn-primary';
           buttonEl.type = 'button';
-          buttonEl.textContent = 'View on IMDB';
+          buttonEl.textContent = 'View on TMDB';
 
           const basePath = type === 'movie'
             ? 'https://www.themoviedb.org/movie/'
